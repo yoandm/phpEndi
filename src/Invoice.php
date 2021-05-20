@@ -85,16 +85,12 @@
 		public static function save($invoice, $data){
 
 			$data = array_merge($data, array(
-				'id' => $invoice
+				'id' => $invoice,
+				'business_type_id' => 2
 			));		
 
 			$result = self::json('https://' . phpEndi::$url . '/api/v1/invoices/' . $invoice, $data, 'PATCH');
 
 		}
-
-
-
-
-
 
 	}

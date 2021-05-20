@@ -8,7 +8,6 @@
 
 	phpEndi::connect('email@domain.com', 'password', 'mydomain.fr', 1000); 
 
-
 	$client = Customer::add([
 				'code' => '',
 				'company_name' => 'test',
@@ -29,8 +28,6 @@
 				'comments' => ''
 	]);
 	
-
-
 	Customer::addToProject($client, 142874);
 
 	$facture = Invoice::add($client, 142874, 'Ma super facture');
@@ -59,12 +56,8 @@
 
 	Invoice::save($facture, [
 								'name' => 'Ma super facture',
-								'business_type_id' => 2,
 								'financial_year' => date('Y')	
 						]
-
 	);
-
-
 
 	phpEndi::destroySession();
