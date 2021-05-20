@@ -9,7 +9,7 @@ Celle-ci est utilisable pour la création de factures en mode HT dans des affair
 
 ## Usage
 Cette section sera complétée dans le futur.
-En attendant il suffit de vous rendre dans le répertoire exemple.
+En attendant il suffit de vous rendre dans le répertoire "examples".
 
 Un point de détail tout de même pour la connexion.
 La méthode "connect" dispose de 4 paramètres :
