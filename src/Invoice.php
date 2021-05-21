@@ -40,6 +40,16 @@
 			return $result['response'];
 		}
 
+		public static function getPdf($invoice){
+			$result = self::html('https://' . phpEndi::$url . '/invoices/' . $invoice . '.pdf' , array(), 0);
+
+			if($result['code'] != 200)
+				return 0;
+			
+			return $result['response'];
+
+		}
+
 		public static function getTaskLineGroups($invoice){
 
 			$result = self::json('https://' . phpEndi::$url . '/api/v1/invoices/' . $invoice .'/task_line_groups', array(), 'GET');

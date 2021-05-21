@@ -18,7 +18,7 @@
 			return $retval;
 		}
 
-		public static function html($endpoint, $data){
+		public static function html($endpoint, $data, $headers = 1){
 
 			$data = array_merge($data, array(
 				'_charset_' => 'utf-8',
@@ -32,7 +32,8 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			
-			curl_setopt($ch,  CURLOPT_HEADER,  1);
+			if($headers)
+				curl_setopt($ch,  CURLOPT_HEADER,  1);
 			
 			curl_setopt($ch, CURLOPT_POSTFIELDS, self::multipart_build_query($data));
 
