@@ -107,10 +107,10 @@
 
 			$data = array(
 				'comment' => $comment,
-				'submit' => 'validation'
+				'submit' => 'wait'
 			);		
 
-			$result = self::json('https://' . phpEndi::$url . '/api/v1/invoices/' . $invoice . '?action=status', $data, 'PATCH');
+			$result = self::json('https://' . phpEndi::$url . '/api/v1/invoices/' . $invoice . '?action=status', $data, 'POST');
 
 		}
 	}
