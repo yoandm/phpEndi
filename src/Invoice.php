@@ -45,7 +45,7 @@
 
 			if($result['code'] != 200)
 				return 0;
-			
+
 			return $result['response'];
 
 		}
@@ -103,4 +103,14 @@
 
 		}
 
+		public static function askValidation($invoice, $comment = ''){
+
+			$data = array(
+				'comment' => $comment,
+				'submit' => 'validation'
+			);		
+
+			$result = self::json('https://' . phpEndi::$url . '/api/v1/invoices/' . $invoice . '?action=status', $data, 'PATCH');
+
+		}
 	}
