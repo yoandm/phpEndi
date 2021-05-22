@@ -9,7 +9,8 @@
 	// Remplacer 1000 par l'identiant de votre structure dans enDI
 	// Si vous allez dans "Mon enseigne" et que vous jetez un oeil à l'URL de la page
 	// vous verrez companies/xxxx. C'est ce xxxx qui nous intéresse
-	phpEndi::connect('email@domain.com', 'password', 'mydomain.fr', 1000); 
+	if(! phpEndi::connect('email@domain.com', 'password', 'https://mydomain.fr', 1000))
+		die('Login ou mot de passe incorrect'); 
 
 	// Pour ajouter un client
 	$client = Customer::add([

@@ -20,6 +20,8 @@
 
 		public static function html($endpoint, $data, $headers = 1){
 
+			$url = phpEndi::$url . $endpoint;
+
 			$data = array_merge($data, array(
 				'_charset_' => 'utf-8',
 				'submit' => ''
@@ -28,7 +30,7 @@
 
 			$ch = curl_init();
 
-			curl_setopt($ch, CURLOPT_URL, $endpoint);
+			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			
@@ -40,14 +42,14 @@
 			$headers = array();
 			$headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
 			$headers[] = 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundarykCpSmBbPgyusHvjn';
-			$headers[] = 'Origin: https://' . phpEndi::$url . '';
+			$headers[] = 'Origin: ' . phpEndi::$url;
 			if(! empty(phpEndi::$cookie))
 				$headers[] = 'Cookie: ' . phpEndi::$cookie . ';';
 
 			$headers[] = 'Accept-Language: fr-fr';
-			$headers[] = 'Host: ' . phpEndi::$url . '';
+			$headers[] = 'Host: ' . str_replace('https://', '', phpEndi::$url);
 			$headers[] = 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15';
-			$headers[] = 'Referer: https://' . phpEndi::$url . '/login?nextpage=%2F';
+			$headers[] = 'Referer: ' . phpEndi::$url . '/login?nextpage=%2F';
 			$headers[] = 'Connection: keep-alive';
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -65,9 +67,11 @@
 
 		public static function json($endpoint, $data, $method){
 
+			$url = phpEndi::$url . $endpoint;
+
 			$ch = curl_init();
 
-			curl_setopt($ch, CURLOPT_URL, $endpoint);
+			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 			switch ($method) {
@@ -92,10 +96,10 @@
 				$headers[] = 'Cookie: ' . phpEndi::$cookie . ';';
 
 			$headers[] = 'Accept-Encoding: gzip, deflate';
-			$headers[] = 'Host: ' . phpEndi::$url . '';
+			$headers[] = 'Host: ' . str_replace('https://', '', phpEndi::$url);
 			$headers[] = 'Accept-Language: fr-fr';
 			$headers[] = 'Cache-Control: no-cache';
-			$headers[] = 'Origin: https://' . phpEndi::$url . '';
+			$headers[] = 'Origin: ' . phpEndi::$url;
 			$headers[] = 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15';
 			$headers[] = 'Connection: keep-alive';
 			$headers[] = 'X-Requested-With: XMLHttpRequest';

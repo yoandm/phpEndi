@@ -21,20 +21,21 @@
 				'nextpage' => '',
 
 			);
-			$result = self::html('https://' . self::$url . '/login?nextpage=%2F', $data);
+			$result = self::html('/login?nextpage=%2F', $data);
 
 			if(! strstr($result['response'], 'The resource was found at /'))
-				die('Login ou mot de passe incorrect');
+				return 0;
 
 			if(empty(self::$cookie)){
 				preg_match('/Set-Cookie: ([^;]*);/', $result['response'], $res);
 				self::$cookie = $res[1];
 			}
 
+			return 1;
 		}
 
 		public static function destroySession(){
-			$result = self::html('https://' . self::$url . '/logout', array());
+			$result = self::html('/logout', array());
 
 		}
 

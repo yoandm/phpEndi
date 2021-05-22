@@ -15,6 +15,6 @@ Un point de détail tout de même pour la connexion.
 La méthode "connect" dispose de 4 paramètres :
 - email de connexion à enDI
 - mot de passe de connexion
-- le domaine où enDI est installé (endi.mondomaine.com par ex)
-  Il faudra préciser le sous-répertoire si enDI n'est pas à la racine (en revanche n'ajoutez pas https://)
+- L'URL où enDI est installé (https://endi.mondomaine.com par ex)
+  Il faudra préciser le sous-répertoire si enDI n'est pas à la racine
 - l'identifiant de votre structure

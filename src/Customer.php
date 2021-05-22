@@ -9,9 +9,9 @@
 				'__formid__' => 'company'
 			));
 
-			$result = self::html('https://' . phpEndi::$url . '/company/' . phpEndi::$company . '/customers', $data);
+			$result = self::html('/company/' . phpEndi::$company . '/customers', $data);
 
-			if(! preg_match('/Location: https:\/\/' . phpEndi::$url . '\/customers\/([0-9]*)/', $result['response'], $res))
+			if(! preg_match('/Location: ' . str_replace('/' , '\/', phpEndi::$url) . '\/customers\/([0-9]*)/', $result['response'], $res))
 				return 0;
 
 			return $res[1];
@@ -26,7 +26,7 @@
 
 			);
 
-			$result = self::html('https://' . phpEndi::$url . '/customers/' . $customer . '?action=addcustomer', $data);
+			$result = self::html('/customers/' . $customer . '?action=addcustomer', $data);
 
 			return 1;
 			
