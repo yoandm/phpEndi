@@ -6,21 +6,20 @@
 
 		public static function add($customer, $project, $name){
 
+			$csrf_token = self::getCsrf('/companies/' . phpEndi::$company . '/invoices');
+
 			$data = array(
-				'__formid__' => 'deform',
 				'customer_id' => $customer,
 				'project_id' => $project,
 				'name' => $name,
-				'business_type_id' => 2
+				'business_type_id' => 2,
+				'csrf_token' => $csrf_token
 			);
 
-			$result = self::html('/company/' . phpEndi::$company . '/invoices?action=add', $data);
+			$result = self::json('/api/v1/companies/' . phpEndi::$company . '/invoices/add', $data, 'POST');
 
-			if(! preg_match('/Location: ' . str_replace('/' , '\/', phpEndi::$url) . '\/invoices\/([0-9]*)/', $result['response'], $res))
-				return 0;
+			return $result['response'];
 
-			return $res[1];
-			
 		}	
 
 		public static function setObject($invoice, $object){
@@ -110,7 +109,7 @@
 				'submit' => 'wait'
 			);		
 
-			$result = self::json('/api/v1/invoices/' . $invoice . '?action=status', $data, 'POST');
+			$result = self::json('/api/v1/invoices/' . $invoice . '?action=status', $data, 'POST', array('Referer' => phpEndi::$url . '/invoices/' . $invoice));
 
 		}
 	}

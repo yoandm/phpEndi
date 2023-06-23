@@ -65,7 +65,7 @@
 
 		}
 
-		public static function json($endpoint, $data, $method){
+		public static function json($endpoint, $data, $method, $moreHeaders = array()){
 
 			$url = phpEndi::$url . $endpoint;
 
@@ -104,6 +104,12 @@
 			$headers[] = 'Connection: keep-alive';
 			$headers[] = 'X-Requested-With: XMLHttpRequest';
 			$headers[] = 'X-Csrftoken: undefined';
+
+			if(count($moreHeaders)){
+				foreach($moreHeaders as $h => $h_value){
+					$headers[] = $h . ': ' . $h_value; 
+				}
+			}
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 			$result = curl_exec($ch);
@@ -114,5 +120,48 @@
 				'response' => json_decode($result, 1)
 			);
 		}
+
+		public static function getHtml($endpoint, $data = array(), $headers = 1){
+
+			$url = phpEndi::$url . $endpoint;
+
+			$ch = curl_init();
+
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			
+			if($headers)
+				curl_setopt($ch,  CURLOPT_HEADER,  1);
+			
+
+			$headers = array();
+			$headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+			$headers[] = 'Origin: ' . phpEndi::$url;
+			if(! empty(phpEndi::$cookie))
+				$headers[] = 'Cookie: ' . phpEndi::$cookie . ';';
+
+			$headers[] = 'Accept-Language: fr-fr';
+			$headers[] = 'Host: ' . str_replace('https://', '', phpEndi::$url);
+			$headers[] = 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15';
+			$headers[] = 'Referer: ' . phpEndi::$url . '/login?nextpage=%2F';
+			$headers[] = 'Connection: keep-alive';
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+			$result = curl_exec($ch);
+			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+			curl_close($ch);
+
+			return array(
+				'code' => $httpcode,
+				'response' => $result
+			);
+
+		}
 		
+		public static function getCsrf($endpoint){
+			$result = self::getHtml($endpoint);
+			preg_match('/csrf_token\" value=\"([^\"]*)/i', $result['response'], $res);
+			return $res[1];
+		}
 	}

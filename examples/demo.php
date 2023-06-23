@@ -38,20 +38,20 @@
 	// Vente / Dossier, vous sélectionnez votre projet
 	// Vous verrez une URL du type projects/xxxx/invoices
 	// C'est ce xxxx qui nous intéresse ici
-	Customer::addToProject($client, 10);
+	Customer::addToProject($client['id'], 10);
 
 	// Création d'une facture
-	$facture = Invoice::add($client, 10, 'Ma super facture'); // remplacez 10 par l'identifiant de votre projet
+	$facture = Invoice::add($client['id'], 10, 'Ma super facture'); // remplacez 10 par l'identifiant de votre projet
 
 	// Mise à jour de l'objet de la facture
-	Invoice::setObject($facture, 'Ma super facture');
+	Invoice::setObject($facture['id'], 'Ma super facture');
 
 	// Pour que la facture affiche le détail
-	Invoice::setDisplayUnit($facture, 1);
+	Invoice::setDisplayUnit($facture['id'], 1);
 
 	// Ajout d'une ligne dans la facture
-	$lgroups = Invoice::getTaskLineGroups($facture);
-	Invoice::addLine($facture, [
+	$lgroups = Invoice::getTaskLineGroups($facture['id']);
+	Invoice::addLine($facture['id'], [
 
 								'order' => 1,
 								'description' => "Super prestation du " . date('d/m/Y'),
@@ -67,14 +67,17 @@
 	);
 
 	// Conditions de paiement spécifique
-	Invoice::setPaymentConditions($facture, 'Paiement par CB');
+	Invoice::setPaymentConditions($facture['id'], 'Paiement par CB');
 
 	// Enregistrement de la facture modifiée
-	Invoice::save($facture, [
+	Invoice::save($facture['id'], [
 								'name' => 'Ma super facture',
 								'financial_year' => date('Y')	
 						]
 	);
+
+	// Demande de validation de la facture
+	//Invoice::askValidation($facture['id']);
 
 	// Fermeture de la session
 	phpEndi::destroySession();

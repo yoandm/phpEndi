@@ -5,16 +5,21 @@
 	class Customer extends Request {
 		public static function add($data){
 
-			$data = array_merge($data, array(
-				'__formid__' => 'company'
-			));
+			$csrf_token = self::getCsrf('/companies/' . phpEndi::$company . '/customers');
 
-			$result = self::html('/company/' . phpEndi::$company . '/customers', $data);
+			$data = array_merge(
+				$data,
+				array(
+					'csrf_token' => $csrf_token
+				)
+			);
 
-			if(! preg_match('/Location: ' . str_replace('/' , '\/', phpEndi::$url) . '\/customers\/([0-9]*)/', $result['response'], $res))
+			$result = self::json('/api/v1/companies/' . phpEndi::$company . '/customers', $data, 'POST');
+
+			if((int) $result['code'] !== 200)
 				return 0;
 
-			return $res[1];
+			return $result['response'];
 			
 		}
 
