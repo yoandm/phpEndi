@@ -112,4 +112,57 @@
 			$result = self::json('/api/v1/invoices/' . $invoice . '?action=status', $data, 'POST', array('Referer' => phpEndi::$url . '/invoices/' . $invoice));
 
 		}
+
+		public static function list($search = array()){
+
+			$customer_id = '';
+			$financial_year = '-1';
+			$invoice_ref = '';
+			$paid_status = 'all';
+
+			if(isset($search['customer_id']))
+				$customer_id = $search['customer_id'];
+
+			if(isset($search['financial_year']))
+				$financial_year = $search['financial_year'];
+
+			if(isset($search['invoice_ref']))
+				$invoice_ref = $search['invoice_ref'];
+
+			if(isset($search['paid_status']))
+				$paid_status = $search['paid_status'];
+							
+			$result = self::getHtml('/company/' . phpEndi::$company . '/invoices.csv?_charset_=UTF-8&__formid__=deform&year=-1&__start__=period%3Amapping&__start__=start%3Amapping&date=&__end__=start%3Amapping&__start__=end%3Amapping&date=&__end__=end%3Amapping&__end__=period%3Amapping&customer_id=' . $customer_id . '&__start__=ttc%3Amapping&start=&end=&__end__=ttc%3Amapping&financial_year=' . $financial_year . '&doctype=both&status=all&paid_status=' . $paid_status . '&payment_mode=all&business_type_id=all&search=' . $invoice_ref. '&items_per_page=100000');
+
+			preg_match('/jobs\/([0-9]*)/', $result['response'], $res);
+		
+			$result = self::json('/jobs/' . $res[1], array(), 'get');
+			$result = self::getHtml('/cooked/' . $result['response']['filename'])['response'];
+
+			preg_match('/\r\n\r\n(.*)/s', $result, $res);
+
+			$csv = trim($res[1]);
+
+			
+			$csv = str_replace('"', '', $csv);
+			$csv = explode("\n", $csv);
+
+			$titles = array();
+			$invoices = array();
+
+			foreach (explode(';', $csv[0]) as $key) {
+				$titles[] = trim($key);
+			}
+
+			for($i = 1; $i < count($csv); $i++){
+				$line = explode(';', $csv[$i]);
+				for($j = 0; $j < count($line); $j++){
+					$invoice[$titles[$j]] = $line[$j];
+				}
+
+				$invoices[] = $invoice; 
+			}
+
+			return $invoices;
+		}
 	}

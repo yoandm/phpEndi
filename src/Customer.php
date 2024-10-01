@@ -37,4 +37,11 @@
 			
 		}	
 
+		public static function get($customer){
+
+			$result = self::json('/api/v1/customers/' . $customer , array(), 'GET');
+
+			return $result['response'];
+		}
+
 	}
